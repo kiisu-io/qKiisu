@@ -9,38 +9,67 @@ env:
 
 jobs:
   build_linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - name: 'Wipe workspace'
-        run: find ./ -mount -maxdepth 1 -exec rm -rf {} \;
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image
-        uses: docker/build-push-action@v5
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
         with:
-          push: false
-          context: docker
-          tags: qkiisu-build:latest
-          load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          version: ${{ env.QT_VERSION }}
+          modules: qtserialport qt5compat qtshadertools
 
-      - name: Build application in docker
-        run: docker run --rm --privileged -v $(pwd):/project qkiisu-build:latest /project/build_linux.sh
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libusb-1.0-0-dev \
+            libfuse2 \
+            libxkbcommon-x11-0 \
+            libxcb-icccm4 \
+            libxcb-image0 \
+            libxcb-keysyms1 \
+            libxcb-randr0 \
+            libxcb-render-util0 \
+            libxcb-xfixes0 \
+            libxcb-cursor0 \
+            libxcb-shape0
+
+      - name: Install linuxdeploy
+        run: |
+          wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
+            -O /usr/local/bin/linuxdeploy && chmod +x /usr/local/bin/linuxdeploy
+          wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage \
+            -O /usr/local/bin/linuxdeploy-plugin-qt && chmod +x /usr/local/bin/linuxdeploy-plugin-qt
+
+      - name: Build
+        run: |
+          mkdir build && cd build
+          qmake ../qKiisu.pro -spec linux-g++ "CONFIG+=release qtquickcompiler" PREFIX="$PWD/AppDir/usr"
+          make qmake_all
+          make -j$(nproc)
+          make install
+
+      - name: Create AppImage
+        run: |
+          cd build
+          export OUTPUT="qKiisu-x86_64.AppImage"
+          linuxdeploy --appdir=AppDir -o appimage \
+            --custom-apprun="../installer-assets/appimage/AppRun" \
+            --exclude-library="libwayland*" \
+            --exclude-library="libxcb*" \
+            --exclude-library="libxkb*" \
+            --exclude-library="libX*"
 
       - name: Publish application
         uses: actions/upload-artifact@v4
         with:
           name: qKiisu-x86_64.AppImage
-          path: ./build/qKiisu-x86_64.AppImage
+          path: build/qKiisu-x86_64.AppImage
           if-no-files-found: error
           retention-days: 7
 
@@ -58,7 +87,7 @@ jobs:
         with:
           version: ${{ env.QT_VERSION }}
           arch: win64_msvc2019_64
-          modules: qtserialport qt5compat qtshadertools qtsvg
+          modules: qtserialport qt5compat qtshadertools
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -68,52 +97,40 @@ jobs:
       - name: Build
         shell: cmd
         run: |
-          qmake qKiisu.pro -spec win32-msvc "CONFIG+=release qtquickcompiler"
+          mkdir build && cd build
+          qmake ..\qKiisu.pro -spec win32-msvc "CONFIG+=release qtquickcompiler"
           nmake qmake_all
           nmake
 
       - name: Deploy
         shell: cmd
         run: |
-          mkdir dist\qKiisu
-          copy release\qKiisu.exe dist\qKiisu\
-          copy release\qKiisu-cli.exe dist\qKiisu\
-          if exist release\plugins\flipperproto0.dll copy release\plugins\flipperproto0.dll dist\qKiisu\plugins\
-          cd dist\qKiisu
+          cd build
+          mkdir qKiisu
+          copy qKiisu.exe qKiisu\
+          copy qKiisu-cli.exe qKiisu\
+          cd qKiisu
           windeployqt --release --no-compiler-runtime --qmldir %GITHUB_WORKSPACE%\application qKiisu.exe
           windeployqt --release --no-compiler-runtime qKiisu-cli.exe
 
-      # TODO: Enable Windows code signing when cloud signing certificate is ready
+      # TODO: Enable Windows cloud code signing when certificate is ready
       # - name: Sign executables
-      #   if: env.SIGNING_ENABLED == 'true'
-      #   shell: cmd
-      #   run: |
-      #     signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 dist\qKiisu\qKiisu.exe
-      #     signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 dist\qKiisu\qKiisu-cli.exe
+      #   if: secrets.SIGNING_CERT != ''
+      #   run: ...
 
       - name: Package zip
         shell: cmd
         run: |
-          cd dist
-          tar -a -cf %GITHUB_WORKSPACE%\qKiisu-64bit.zip qKiisu\*
-
-      - name: Install NSIS
-        shell: cmd
-        run: choco install nsis -y --no-progress
-
-      - name: Build installer
-        shell: cmd
-        run: |
-          "%programfiles(x86)%\NSIS\makensis.exe" /DNAME=qKiisu /DARCH_BITS=64 installer_windows.nsi
+          cd build
+          tar -a -cf qKiisu-64bit.zip qKiisu\*
 
       - name: Publish application
         uses: actions/upload-artifact@v4
         with:
           name: qKiisu-Windows-64bit
           path: |
-            build/qKiisuSetup-64bit.exe
-            qKiisu-64bit.zip
-          if-no-files-found: warn
+            build/qKiisu-64bit.zip
+          if-no-files-found: error
           retention-days: 7
 
   build_mac:
@@ -129,7 +146,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          modules: qtserialport qt5compat qtshadertools qtsvg
+          modules: qtserialport qt5compat qtshadertools
 
       - name: Install dependencies
         run: brew install libusb
@@ -148,35 +165,29 @@ jobs:
           mkdir -p qKiisu.app/Contents/Frameworks
           cp $(brew --prefix libusb)/lib/libusb-1.0.0.dylib qKiisu.app/Contents/Frameworks/
 
-          # Fix libusb rpaths
-          install_name_tool -change \
-            "$(otool -L qKiisu.app/Contents/MacOS/qKiisu | grep libusb | awk '{print $1}')" \
-            "@loader_path/../Frameworks/libusb-1.0.0.dylib" \
-            qKiisu.app/Contents/MacOS/qKiisu
-
-          if [ -f qKiisu.app/Contents/MacOS/qKiisu-cli ]; then
-            install_name_tool -change \
-              "$(otool -L qKiisu.app/Contents/MacOS/qKiisu-cli | grep libusb | awk '{print $1}')" \
-              "@loader_path/../Frameworks/libusb-1.0.0.dylib" \
-              qKiisu.app/Contents/MacOS/qKiisu-cli
-          fi
-
           install_name_tool -id \
             "@loader_path/libusb-1.0.0.dylib" \
             qKiisu.app/Contents/Frameworks/libusb-1.0.0.dylib
 
+          for bin in qKiisu.app/Contents/MacOS/qKiisu qKiisu.app/Contents/MacOS/qKiisu-cli; do
+            if [ -f "$bin" ]; then
+              LIBUSB_PATH=$(otool -L "$bin" | grep libusb | awk '{print $1}')
+              if [ -n "$LIBUSB_PATH" ]; then
+                install_name_tool -change "$LIBUSB_PATH" \
+                  "@loader_path/../Frameworks/libusb-1.0.0.dylib" "$bin"
+              fi
+            fi
+          done
+
       # TODO: Enable macOS code signing when Apple Developer certificate is ready
       # - name: Sign application
-      #   if: env.SIGNING_ENABLED == 'true'
-      #   env:
-      #     MAC_OS_SIGNING_KEY_ID: ${{ secrets.MAC_OS_SIGNING_KEY_ID }}
-      #   run: |
-      #     codesign --force --options=runtime -s "$MAC_OS_SIGNING_KEY_ID" --deep -v build_mac/qKiisu.app
+      #   if: secrets.MAC_OS_SIGNING_KEY_ID != ''
+      #   run: codesign --force --options=runtime -s "${{ secrets.MAC_OS_SIGNING_KEY_ID }}" --deep -v build_mac/qKiisu.app
 
       - name: Create DMG
         run: |
+          pip3 install --break-system-packages dmgbuild
           cd build_mac
-          pip3 install dmgbuild
           dmgbuild \
             -s "../installer-assets/macos/dmgbuild-config.py" \
             -D "app=qKiisu.app" \
@@ -188,5 +199,5 @@ jobs:
         with:
           name: qKiisu-macOS
           path: build_mac/qKiisu.dmg
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 7
