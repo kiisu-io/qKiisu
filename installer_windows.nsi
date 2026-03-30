@@ -1,4 +1,4 @@
-; qFlipper Windows Installer Build Script 
+; qKiisu Windows Installer Build Script
 ; requires NullSoft Installer 3.08 or later
 ; Reference http://kkmalar.org/WebApplication/qz-print-2.0.0-RC1/ant/windows/windows-packager.nsi.in
 
@@ -16,8 +16,8 @@
   ;Compression algorithm used to compress files/data in the installer
   SetCompressor /solid /final lzma
 
-  !define /ifndef NAME "qFlipper"
-  !define /ifndef COMPANY "Flipper Devices Inc."
+  !define /ifndef NAME "qKiisu"
+  !define /ifndef COMPANY "RainWalker OÜ"
   !define /ifndef ARCH_BITS 64
   !define UNINSTALL_EXE "$INSTDIR\uninstall.exe"
   !define VCREDIST2019_EXE "$INSTDIR\vcredist_msvc2019_x${ARCH_BITS}.exe"
@@ -48,7 +48,7 @@
   !delfile "${StdOut}"
   !undef StdOut
 
-  ; Default installation Dir. On Windows it will be C:\Program Files\qFlipper
+  ; Default installation Dir. On Windows it will be C:\Program Files\qKiisu
   InstallDir "$PROGRAMFILES64\${NAME}"
 
   ; Installer/Uninstaller Icon
@@ -59,31 +59,31 @@
   ManifestDPIAware true
 
   ; Sign the Uninstaller.exe file
-  !uninstfinalize 'flipper_code_sign.bat "%1" wow64shit'
+  !uninstfinalize 'kiisu_code_sign.bat "%1" wow64shit'
 
   ; Version Information displayer in Properties -> Details tab
   ; Required for antivirus databases
   VIProductVersion "${VERSION}.0" ; Only exact 4 numbers allowed x.x.x.x
-  VIAddVersionKey "FileDescription" "qFlipper Windows Installer"
+  VIAddVersionKey "FileDescription" "qKiisu Windows Installer"
   VIAddVersionKey "FileVersion" "${VERSION}.0"
-  VIAddVersionKey "ProductName" "qFlipper"  
+  VIAddVersionKey "ProductName" "qKiisu"
   VIAddVersionKey "ProductVersion" "${VERSION}.0"
-  VIAddVersionKey "CompanyName" "Flipper Devices Inc."
-  VIAddVersionKey "LegalCopyright" "(C) Flipper Devices Inc."
+  VIAddVersionKey "CompanyName" "RainWalker OÜ"
+  VIAddVersionKey "LegalCopyright" "(C) RainWalker OÜ"
 
 ;--------------------------------
 ;Installer wizard pages
 
   ; Global window title 
-  Caption "qFlipper ${VERSION} Setup"
+  Caption "qKiisu ${VERSION} Setup"
 
   !define MUI_HEADERIMAGE
   !define MUI_HEADERIMAGE_BITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header216.bmp"
   !define MUI_HEADERIMAGE_UNBITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header216.bmp"
 
   ; Welcome and Finish page settings
-  !define MUI_WELCOMEPAGE_TITLE  "Welcome to qFlipper ${VERSION} Setup"
-  !define MUI_WELCOMEPAGE_TEXT "qFlipper is a desktop application for updating Flipper Zero firmware and databases, manage files on SD card, and repair corrupted device.$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\nCredits$\r$\nCode:   Georgii Surkov$\r$\nDesign: Valerie Aquamine, Dmitry Pavlov$\n$\r$\nOpen Source and Distributed under GPL v3 License$\r$\nCopyright (C) 2022 Flipper Devices Inc."
+  !define MUI_WELCOMEPAGE_TITLE  "Welcome to qKiisu ${VERSION} Setup"
+  !define MUI_WELCOMEPAGE_TEXT "qKiisu is a desktop application for updating Kiisu firmware and databases, manage files on SD card, and repair corrupted device.$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\nOpen Source and Distributed under GPL v3 License$\r$\nCopyright (C) 2024 RainWalker OÜ"
   !define MUI_WELCOMEFINISHPAGE_BITMAP "installer-assets\backgrounds\windows_installer\windows_installer_welcome216.bmp"
   !define MUI_UNWELCOMEFINISHPAGE_BITMAP "installer-assets\backgrounds\windows_uninstaller\windows_uninstaller_welcome216.bmp"
   !define MUI_PAGE_CUSTOMFUNCTION_SHOW showHiDpi ; HiDpi replace image hack for welcome page
@@ -94,11 +94,11 @@
   ;!define MUI_FINISHPAGE_NOAUTOCLOSE ; Debug
   !insertmacro MUI_PAGE_INSTFILES
 
-  !define MUI_FINISHPAGE_TITLE "qFlipper ${VERSION} Setup Complete"
+  !define MUI_FINISHPAGE_TITLE "qKiisu ${VERSION} Setup Complete"
 ;  !define MUI_FINISHPAGE_RUN "$INSTDIR\${NAME}.exe"
-;  !define MUI_FINISHPAGE_RUN_TEXT "Run qFlipper now"
-  !define MUI_FINISHPAGE_LINK "More Info --> Flipper Zero Documentation"
-  !define MUI_FINISHPAGE_LINK_LOCATION "https://docs.flipperzero.one"
+;  !define MUI_FINISHPAGE_RUN_TEXT "Run qKiisu now"
+  !define MUI_FINISHPAGE_LINK "More Info --> Kiisu Documentation"
+  !define MUI_FINISHPAGE_LINK_LOCATION "https://kiisu.io"
   !define MUI_PAGE_CUSTOMFUNCTION_SHOW showHiDpi ; HiDpi replace image hack for finish page
   !insertmacro MUI_PAGE_FINISH
 
@@ -126,10 +126,10 @@ Section "-Main Application"
 
     ; Sets the context of shell folders to "All Users"
     SetShellVarContext all    
-    ; Kills running qFlipper.exe processes
-    DetailPrint "Looking for running qFlipper.exe..."
-    nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qFlipper.exe'$\" CALL terminate"
-    nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qFlipper.exe'$\" CALL terminate" ;Twice to avoid long time exiting
+    ; Kills running qKiisu.exe processes
+    DetailPrint "Looking for running qKiisu.exe..."
+    nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qKiisu.exe'$\" CALL terminate"
+    nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qKiisu.exe'$\" CALL terminate" ;Twice to avoid long time exiting
     SetShellVarContext current
 
 	SetOutPath $INSTDIR
@@ -199,7 +199,7 @@ Section "-Cleanup"
 SectionEnd
 
 
-; Section to remove all Flipper Drivers, unchecked by default
+; Section to remove all Kiisu Drivers, unchecked by default
 Section /o "un.Remove Drivers" RemoveDriversSection
   DetailPrint "Removing drivers. This may take a while..."
   nsExec::ExecToLog '$SYSDIR\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy RemoteSigned -File "${STM32_DRIVER_PATH}\delete_all_dfu_drivers.ps1"'
@@ -208,15 +208,15 @@ SectionEnd
 ;--------------------------------
 ;Uninstaller Section
 
-Section "un.Uninstall qFlipper" UninstallqFlipperSection
+Section "un.Uninstall qKiisu" UninstallqKiisuSection
 
   ; Use 64bit registry keys, not WOW6432Node
-  SetRegView 64 
+  SetRegView 64
 
-  ; Kills running qFlipper.exe processes
-  DetailPrint "Looking for running qFlipper.exe..."
-  nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qFlipper.exe'$\" CALL terminate"
-  nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qFlipper.exe'$\" CALL terminate" ;Twice to avoid long time exiting
+  ; Kills running qKiisu.exe processes
+  DetailPrint "Looking for running qKiisu.exe..."
+  nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qKiisu.exe'$\" CALL terminate"
+  nsExec::ExecToLog "wmic.exe PROCESS where $\"Name like 'qKiisu.exe'$\" CALL terminate" ;Twice to avoid long time exiting
 
   Delete "$DESKTOP\${NAME}.lnk"
   Delete "$SMPROGRAMS\${NAME}.lnk"
@@ -232,11 +232,11 @@ SectionEnd
 ; A text hovers over a component on choosing components to install on MUI_PAGE_COMPONENTS
    
   ;Language strings
-  LangString DESC_UsbDriverSection ${LANG_ENGLISH} "STM32 Bootloader Driver for Flipper DFU mode"
-  LangString DESC_StartMenuSection ${LANG_ENGLISH} "Add qFlipper to Windows Start menu"
-  LangString DESC_DesktopShortcutSection ${LANG_ENGLISH} "Create qFlipper shortcut on Desktop"
+  LangString DESC_UsbDriverSection ${LANG_ENGLISH} "STM32 Bootloader Driver for Kiisu DFU mode"
+  LangString DESC_StartMenuSection ${LANG_ENGLISH} "Add qKiisu to Windows Start menu"
+  LangString DESC_DesktopShortcutSection ${LANG_ENGLISH} "Create qKiisu shortcut on Desktop"
   LangString DESC_RemoveDriversSection ${LANG_ENGLISH} "Remove all STM32 USB drivers from the system"
-  LangString DESC_UninstallqFlipperSection ${LANG_ENGLISH} "Remove all STM32 USB drivers from the system"
+  LangString DESC_UninstallqKiisuSection ${LANG_ENGLISH} "Remove all STM32 USB drivers from the system"
   ;Assign language strings to install sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${UsbDriverSection} $(DESC_UsbDriverSection)
@@ -246,6 +246,7 @@ SectionEnd
   ;Assign language strings to UNinstall sections
   !insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${RemoveDriversSection} $(DESC_RemoveDriversSection)
+    !insertmacro MUI_DESCRIPTION_TEXT ${UninstallqKiisuSection} $(DESC_UninstallqKiisuSection)
   !insertmacro MUI_UNFUNCTION_DESCRIPTION_END
 
 
@@ -256,7 +257,7 @@ SectionEnd
 
     ; Abort if not Windows 10 and newer
     ${IfNot} ${AtLeastWin10}
-      MessageBox MB_OK|MB_ICONSTOP "Can not install qFlipper. Windows 10 and newer required"
+      MessageBox MB_OK|MB_ICONSTOP "Can not install qKiisu. Windows 10 and newer required"
       Abort
     ${EndIf}
 
@@ -264,7 +265,7 @@ SectionEnd
       ${DisableX64FSRedirection} ; Disable using SysWOW64 for 32-bit files
       SetRegView 64 ; Use 64bit registry keys, not WOW6432Node
     ${Else}
-      MessageBox MB_OK|MB_ICONSTOP "Error: Can't install qFlipper on 32-bit Windows. Use 64-bit version of Windows"
+      MessageBox MB_OK|MB_ICONSTOP "Error: Can't install qKiisu on 32-bit Windows. Use 64-bit version of Windows"
       Abort ; Exit installer if 32 bit windows
      ${EndIf}  
 

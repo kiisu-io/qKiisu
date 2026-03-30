@@ -1,23 +1,23 @@
-# Nix packaging for qFlipper
+# Nix packaging for qKiisu
 
 
 ## Building
 
 __Check that you have at least Nix 2.6.__
 
-You can build qFlipper via Nix with one command.
+You can build qKiisu via Nix with one command.
 
 ```
-nix build --experimental-features "nix-command flakes" 'github:flipperdevices/qFlipper?dir=contrib/nix&submodules=1'
+nix build --experimental-features "nix-command flakes" 'github:kiisu-io/qKiisu?dir=contrib/nix&submodules=1'
 ```
 
 For simplicity, I will leave out `--experimental-features "nix-command flakes"` in further examples. [Enable flakes](#Enabling%20flakes) to leave those options out.
 
-If you wish to use a different version of qFlipper, just specify the commit hash or revision after the repo path.
+If you wish to use a different version of qKiisu, just specify the commit hash or revision after the repo path.
 
 
 ```
-nix build 'github:flipperdevices/qFlipper/COMMIT_HASH_OR_REVISION?dir=contrib/nix&submodules=1'
+nix build 'github:kiisu-io/qKiisu/COMMIT_HASH_OR_REVISION?dir=contrib/nix&submodules=1'
 ```
 
 _Note that it won't work for revisions not containing Nix Flake files_

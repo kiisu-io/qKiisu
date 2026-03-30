@@ -91,9 +91,9 @@
         <file>components/TextBox.qml</file>
         <file>assets/gfx/images/spinner.svg</file>
         <file>assets/gfx/symbolic/developer-mode.svg</file>
-        <file>assets/icons/qFlipper.icns</file>
-        <file>assets/icons/qFlipper.ico</file>
-        <file>assets/icons/qFlipper.png</file>
+        <file>assets/icons/qKiisu.icns</file>
+        <file>assets/icons/qKiisu.ico</file>
+        <file>assets/icons/qKiisu.png</file>
         <file>assets/gfx/symbolic/file-symbolic.svg</file>
         <file>components/FileManager.qml</file>
         <file>components/FileManagerDelegate.qml</file>
@@ -126,22 +126,22 @@
         <file>assets/gfx/images/streaming-help-mac.svg</file>
         <file>components/SDWarningDialog.qml</file>
         <file>assets/gfx/images/warning-no-sdcard.svg</file>
-        <file>styles/DefaultAmber/Button.qml</file>
-        <file>styles/DefaultAmber/ComboBox.qml</file>
-        <file>styles/DefaultAmber/Dialog.qml</file>
-        <file>styles/DefaultAmber/DialogButtonBox.qml</file>
-        <file>styles/DefaultAmber/IconLabelEx.qml</file>
-        <file>styles/DefaultAmber/Menu.qml</file>
-        <file>styles/DefaultAmber/MenuItem.qml</file>
-        <file>styles/DefaultAmber/MenuSeparator.qml</file>
-        <file>styles/DefaultAmber/ProgressBar.qml</file>
-        <file>styles/DefaultAmber/qmldir</file>
-        <file>styles/DefaultAmber/ScrollBar.qml</file>
-        <file>styles/DefaultAmber/ScrollView.qml</file>
-        <file>styles/DefaultAmber/Switch.qml</file>
-        <file>styles/DefaultAmber/TabBar.qml</file>
-        <file>styles/DefaultAmber/TabButton.qml</file>
-        <file>styles/DefaultAmber/ToolTip.qml</file>
+        <file>styles/DefaultTeal/Button.qml</file>
+        <file>styles/DefaultTeal/ComboBox.qml</file>
+        <file>styles/DefaultTeal/Dialog.qml</file>
+        <file>styles/DefaultTeal/DialogButtonBox.qml</file>
+        <file>styles/DefaultTeal/IconLabelEx.qml</file>
+        <file>styles/DefaultTeal/Menu.qml</file>
+        <file>styles/DefaultTeal/MenuItem.qml</file>
+        <file>styles/DefaultTeal/MenuSeparator.qml</file>
+        <file>styles/DefaultTeal/ProgressBar.qml</file>
+        <file>styles/DefaultTeal/qmldir</file>
+        <file>styles/DefaultTeal/ScrollBar.qml</file>
+        <file>styles/DefaultTeal/ScrollView.qml</file>
+        <file>styles/DefaultTeal/Switch.qml</file>
+        <file>styles/DefaultTeal/TabBar.qml</file>
+        <file>styles/DefaultTeal/TabButton.qml</file>
+        <file>styles/DefaultTeal/ToolTip.qml</file>
         <file>imports/Primitives/ColorSet.qml</file>
         <file>components/WindowShadow.qml</file>
         <file>assets/gfx/effects/window-shadow.png</file>

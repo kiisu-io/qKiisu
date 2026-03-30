@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 import QtQml.Models 2.15
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 AbstractOverlay {
     id: overlay
@@ -224,11 +224,11 @@ AbstractOverlay {
                 case ApplicationBackend.CanRepair:
                     return qsTr("Repair a broken firmware installation. May erase your progress and settings.");
                 case ApplicationBackend.CanUpdate:
-                    return qsTr("Update Flipper to the latest version");
+                    return qsTr("Update Kiisu to the latest version");
                 case ApplicationBackend.CanInstall:
                     return qsTr("Install firmware from currently selected update channel");
                 case ApplicationBackend.ErrorOccured:
-                    return qsTr("Press to check internet connection and try to update Flipper again");
+                    return qsTr("Press to check internet connection and try to update Kiisu again");
                 default:
                     return "";
                 }
@@ -454,7 +454,7 @@ AbstractOverlay {
                 title : qsTr("Install wireless stack?"),
                 customText: qsTr("Install"),
                 suggestedRole: ConfirmationDialog.RejectRole,
-                message: qsTr("WARNING! This operaton can break your Flipper!")
+                message: qsTr("WARNING! This operaton can break your Kiisu!")
             };
 
             const actionFunc = function() {
@@ -504,7 +504,7 @@ AbstractOverlay {
             tabs.addItem(developerTab);
         }
 
-        // Close dialog windows when Flipper was PIN locked/disconnected
+        // Close dialog windows when Kiisu was PIN locked/disconnected
         Backend.currentDeviceChanged.connect(function() {
             if(messageDialog.visible) {
                 messageDialog.close();

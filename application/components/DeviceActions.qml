@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 
 Item {
@@ -79,7 +79,7 @@ Item {
 
                 ToolTip {
                     visible: parent.hovered
-                    text: qsTr("Save the contents of Flipper's internal storage to this computer's disk.")
+                    text: qsTr("Save the contents of Kiisu's internal storage to this computer's disk.")
                     implicitWidth: 250
                 }
             }
@@ -94,7 +94,7 @@ Item {
 
                 ToolTip {
                     visible: parent.hovered
-                    text: qsTr("Download the contents of a backup directory to Flipper's internal storage.")
+                    text: qsTr("Download the contents of a backup directory to Kiisu's internal storage.")
                     implicitWidth: 250
                 }
             }
@@ -109,7 +109,7 @@ Item {
 
                 ToolTip {
                     visible: parent.hovered
-                    text: qsTr("Revert Flipper to its default settings. WARNING! All progress will be lost!")
+                    text: qsTr("Revert Kiisu to its default settings. WARNING! All progress will be lost!")
                     implicitWidth: 250
                 }
             }

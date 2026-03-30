@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 Item {
     id: overlay
@@ -32,7 +32,7 @@ Item {
         y: 264
 
         color: Theme.color.lightorange2
-        text: qsTr("Connect your Flipper")
+        text: qsTr("Connect your Kiisu")
 
         font.family: "Born2bSportyV2"
         font.pixelSize: 48

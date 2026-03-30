@@ -12,7 +12,7 @@
 
 #define FLIPPERZERO_VID 0x0483
 #define FLIPPERZERO_PID 0xdf11
-#define FLIPPERZERO_DESC "Flipper Zero in DFU mode"
+#define FLIPPERZERO_DESC "Kiisu in DFU mode"
 
 #define MANUFACTURER_DESC "Flipper Devices Inc."
 
@@ -154,14 +154,14 @@ int install_flipper_driver(HWND hwnd)
 {
     const int name_length = get_store_inf_folder(FLIPPERZERO_INF, NULL);
     if(name_length > 0) {
-        printf("Flipper Zero DFU driver is already installed.\n");
+        printf("Kiisu DFU driver is already installed.\n");
         return 0;
 
     } else if(name_length < 0) {
         return -1;
     }
 
-    printf("Installing Flipper Zero DFU driver...\n");
+    printf("Installing Kiisu DFU driver...\n");
 
     struct wdi_device_info device_info = { NULL, FLIPPERZERO_VID, FLIPPERZERO_PID, FALSE, 0, FLIPPERZERO_DESC, NULL, NULL, NULL };
     struct wdi_options_prepare_driver prepare_options = { WDI_WINUSB, MANUFACTURER_DESC, NULL, FALSE, FALSE, NULL, FALSE };
@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
     }
 
     if(install_flipper_driver(parent_handle)) {
-        printf("Error: failed to install Flipper Zero driver.\n");
+        printf("Error: failed to install Kiisu driver.\n");
         return -3;
     }
 

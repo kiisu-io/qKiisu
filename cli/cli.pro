@@ -1,7 +1,7 @@
 QT -= gui
 QT += serialport network
 
-include(../qflipper_common.pri)
+include(../qkiisu_common.pri)
 
 TARGET = $${NAME}-cli
 

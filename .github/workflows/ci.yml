@@ -24,25 +24,25 @@ jobs:
         with:
           push: false
           context: docker
-          tags: qflipper-build:latest
+          tags: qkiisu-build:latest
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Build application in docker
-        run: docker run --rm --privileged -v $(pwd):/project qflipper-build:latest /project/build_linux.sh
+        run: docker run --rm --privileged -v $(pwd):/project qkiisu-build:latest /project/build_linux.sh
 
       - name: Publish application
         uses: actions/upload-artifact@v4
         with:
-          name: qFlipper-x86_64.AppImage
+          name: qKiisu-x86_64.AppImage
           path: |
-                ./build/qFlipper-x86_64.AppImage
+                ./build/qKiisu-x86_64.AppImage
           if-no-files-found: error
           retention-days: 1
 
   build_mac:
-    runs-on: [self-hosted, ARM64, macOS, qFlipper]
+    runs-on: [self-hosted, ARM64, macOS, qKiisu]
     env:
       MAC_OS_KEYCHAIN_NAME: ${{ secrets.MAC_OS_KEYCHAIN_NAME }}
       MAC_OS_KEYCHAIN_PASSWORD: ${{ secrets.MAC_OS_KEYCHAIN_PASSWORD }}
@@ -63,9 +63,9 @@ jobs:
       - name: Publish application
         uses: actions/upload-artifact@v4
         with:
-          name: qflipper.dmg
+          name: qkiisu.dmg
           path: |
-            ./build_mac/qflipper.dmg
+            ./build_mac/qkiisu.dmg
           if-no-files-found: error
           retention-days: 1
 
@@ -86,10 +86,10 @@ jobs:
       - name: Publish application
         uses: actions/upload-artifact@v4
         with:
-          name: qFlipperSetup-64bit.exe
+          name: qKiisuSetup-64bit.exe
           path: |
-            .\build\qFlipperSetup-64bit.exe
-            .\build\qFlipper-64bit.zip
+            .\build\qKiisuSetup-64bit.exe
+            .\build\qKiisu-64bit.zip
           if-no-files-found: error
           retention-days: 1
 
@@ -123,20 +123,20 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: qFlipper-x86_64.AppImage
+          name: qKiisu-x86_64.AppImage
       - uses: actions/download-artifact@v4
         with:
-          name: qFlipperSetup-64bit.exe
+          name: qKiisuSetup-64bit.exe
       - uses: actions/download-artifact@v4
         with:
-          name: qflipper.dmg
+          name: qkiisu.dmg
 
       - name: Rename app
         run: |
-            mv qFlipper-x86_64.AppImage ./artifacts/qFlipper-x86_64-${SUFFIX}.AppImage
-            mv qFlipperSetup-64bit.exe ./artifacts/qFlipperSetup-64bit-${SUFFIX}.exe
-            mv qFlipper-64bit.zip ./artifacts/qFlipper-64bit-${SUFFIX}.zip
-            mv qflipper.dmg ./artifacts/qFlipper-${SUFFIX}.dmg
+            mv qKiisu-x86_64.AppImage ./artifacts/qKiisu-x86_64-${SUFFIX}.AppImage
+            mv qKiisuSetup-64bit.exe ./artifacts/qKiisuSetup-64bit-${SUFFIX}.exe
+            mv qKiisu-64bit.zip ./artifacts/qKiisu-64bit-${SUFFIX}.zip
+            mv qkiisu.dmg ./artifacts/qKiisu-${SUFFIX}.dmg
 
       - name: Upload artifacts to update server
         if: ${{ !github.event.pull_request.head.repo.fork }}
@@ -145,4 +145,4 @@ jobs:
           curl --fail -L -H "Token: ${{ secrets.INDEXER_TOKEN }}" \
               -F "branch=${REF}" \
               ${FILES[@]} \
-              "${{ secrets.INDEXER_URL }}"/qFlipper/uploadfiles
+              "${{ secrets.INDEXER_URL }}"/qKiisu/uploadfiles

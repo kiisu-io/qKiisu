@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Controls.impl 2.15
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 Rectangle {
     id: control
@@ -35,7 +35,7 @@ Rectangle {
                   Backend.errorType === BackendError.SerialAccessError ? qsTr("Cannot access serial port"):
                   Backend.errorType === BackendError.RecoveryAccessError ? qsTr("Cannot access device in recovery mode"):
                   Backend.errorType === BackendError.DiskError ? qsTr("Disk access error"):
-                  Backend.errorType === BackendError.BackupError ? qsTr("Cannot save Flipper data"):
+                  Backend.errorType === BackendError.BackupError ? qsTr("Cannot save Kiisu data"):
                   Backend.errorType === BackendError.OperationError ? qsTr("Operation interrupted"):
                   Backend.errorType === BackendError.DataError ? qsTr("Data corrupted"): qsTr("Something went wrong. Check logs for details.") :
 

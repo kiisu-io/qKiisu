@@ -1,6 +1,6 @@
 import QtQuick 2.15
 
-import QFlipper 1.0
+import QKiisu 1.0
 
 Item {
     id: overlay

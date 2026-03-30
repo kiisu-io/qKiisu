@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 AbstractOverlay {
     id: overlay
@@ -22,9 +22,9 @@ AbstractOverlay {
         text: {
             switch(Backend.backendState) {
             case Backend.UpdatingDevice:
-                return qsTr("Updating your Flipper");
+                return qsTr("Updating your Kiisu");
             case Backend.RepairingDevice:
-                return qsTr("Repairing your Flipper");
+                return qsTr("Repairing your Kiisu");
             case Backend.CreatingBackup:
                 return qsTr("Creating Backup");
             case Backend.RestoringBackup:

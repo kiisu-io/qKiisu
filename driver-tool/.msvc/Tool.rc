@@ -87,13 +87,13 @@ BEGIN
     BEGIN
         BLOCK "040004b0"
         BEGIN
-            VALUE "CompanyName", "Flipper Devices Inc."
-            VALUE "FileDescription", "Flipper Zero driver installation tool"
+            VALUE "CompanyName", "RainWalker OÜ"
+            VALUE "FileDescription", "Kiisu driver installation tool"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "FlipperDriverTool"
             VALUE "LegalCopyright", "Copyright (C) 2021"
             VALUE "OriginalFilename", "FlipperDriverTool"
-            VALUE "ProductName", "Flipper Zero driver installation tool"
+            VALUE "ProductName", "Kiisu driver installation tool"
             VALUE "ProductVersion", "1.0.0.1"
         END
     END

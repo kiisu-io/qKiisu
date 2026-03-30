@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 CustomDialog {
     id: control

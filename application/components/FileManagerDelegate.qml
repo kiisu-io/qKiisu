@@ -5,7 +5,7 @@ import QtQuick.Controls.impl 2.15
 
 import Misc 1.0
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 Item {
     id: delegate

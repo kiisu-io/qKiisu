@@ -1,4 +1,4 @@
-module DefaultAmber
+module DefaultTeal
 
 Button 2.15 Button.qml
 ColorGroup 2.15 ColorGroup.qml

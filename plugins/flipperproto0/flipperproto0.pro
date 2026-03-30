@@ -1,6 +1,6 @@
 QT -= gui
 
-include(../../qflipper_common.pri)
+include(../../qkiisu_common.pri)
 
 win32: TARGET = flipperproto
 else: TARGET = flipperproto0

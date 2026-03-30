@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+StartupWMClass=qKiisu
+Categories=Utility;Education
+Comment=Update your Kiisu easily
+Icon=qKiisu
+Name=qKiisu
+Exec=qKiisu
+Terminal=false
+

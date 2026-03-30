@@ -8,7 +8,7 @@ export QT_QPA_PLATFORMTHEME=xdgdesktopportal
 THIS_DIR="$(readlink -f "$(dirname "$0")")"
 APPIMAGE_NAME="$(basename "$APPIMAGE")"
 
-RULES_FILE_NAME='42-flipperzero.rules'
+RULES_FILE_NAME='42-kiisu.rules'
 RULES_DIR=${3:-'/etc/udev/rules.d'}
 TARGET_RULES_FILE="$RULES_DIR/$RULES_FILE_NAME"
 SOURCE_RULES_FILE="$THIS_DIR/usr/lib/udev/rules.d/$RULES_FILE_NAME"
@@ -71,13 +71,13 @@ uninstall_udev_rules() {
 }
 
 if [[ $# -eq 0 ]]; then
-    "$THIS_DIR"/usr/bin/qFlipper
+    "$THIS_DIR"/usr/bin/qKiisu
 elif [[ "$1" = 'gui' ]]; then
     shift 1
-    "$THIS_DIR"/usr/bin/qFlipper "$@"
+    "$THIS_DIR"/usr/bin/qKiisu "$@"
 elif [[ "$1" = 'cli' ]]; then
     shift 1
-    "$THIS_DIR"/usr/bin/qFlipper-cli "$@"
+    "$THIS_DIR"/usr/bin/qKiisu-cli "$@"
 elif [[ "$1" = 'rules' ]]; then
     case "$2" in
         'install') install_udev_rules ;;

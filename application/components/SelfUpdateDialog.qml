@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 CustomDialog {
     id: control
@@ -11,7 +11,7 @@ CustomDialog {
     closable: App.updater.state === ApplicationUpdater.ErrorOccured
     closePolicy: Popup.NoAutoClose
 
-    title: App.updater.state === ApplicationUpdater.Idle ? qsTr("Update qFlipper?") : qsTr("Updating qFlipper")
+    title: App.updater.state === ApplicationUpdater.Idle ? qsTr("Update qKiisu?") : qsTr("Updating qKiisu")
 
     contentWidget: Item {
         implicitWidth: 430
@@ -26,7 +26,7 @@ CustomDialog {
                 visible: App.updater.state === ApplicationUpdater.Idle
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: qsTr("Newer version of qFlipper<br/>will be installed")
+                text: qsTr("Newer version of qKiisu<br/>will be installed")
 
                 lineHeight: 1.4
                 wrapMode: Text.Wrap

@@ -25,7 +25,8 @@ Q_LOGGING_CATEGORY(LOG_APP, "APP")
 
 Application::Application(int &argc, char **argv):
     QtSingleApplication(QStringLiteral(APP_NAME), argc, argv),
-    m_updateRegistry(globalPrefs->checkApplicationUpdates() ? QStringLiteral("https://update.flipperzero.one/qFlipper/directory.json") : QString()),
+    // TODO: Replace with qKiisu update server URL when available
+    m_updateRegistry(globalPrefs->checkApplicationUpdates() ? QStringLiteral("") : QString()),
     m_isDeveloperMode(QGuiApplication::queryKeyboardModifiers() & Qt::KeyboardModifier::AltModifier),
     m_updateStatus(UpdateStatus::NoUpdates)
 {
@@ -159,16 +160,16 @@ void Application::initLogger()
 void Application::initStyles()
 {
 #ifdef Q_OS_LINUX
-    setWindowIcon(QIcon(":/assets/icons/qFlipper.ico"));
+    setWindowIcon(QIcon(":/assets/icons/qKiisu.ico"));
 #endif
 
     QQuickWindow::setDefaultAlphaBuffer(true);
     QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
 
 #if QT_VERSION < 0x060000
-    QQuickStyle::setStyle(":/styles/DefaultAmber");
+    QQuickStyle::setStyle(":/styles/DefaultTeal");
 #else
-    QQuickStyle::setStyle("DefaultAmber");
+    QQuickStyle::setStyle("DefaultTeal");
 #endif
 }
 
@@ -187,18 +188,18 @@ void Application::initTranslations()
 
 void Application::initQmlTypes()
 {
-    qmlRegisterType<ScreenCanvas>("QFlipper", 1, 0, "ScreenCanvas");
+    qmlRegisterType<ScreenCanvas>("QKiisu", 1, 0, "ScreenCanvas");
 
-    qmlRegisterUncreatableType<BackendError>("QFlipper", 1, 0, "BackendError", QStringLiteral("This class is only a enum container"));
-    qmlRegisterUncreatableType<InputEvent>("QFlipper", 1, 0, "InputEvent", QStringLiteral("This class is only a enum container"));
-    qmlRegisterUncreatableType<ApplicationBackend>("QFlipper", 1, 0, "ApplicationBackend", QStringLiteral("This class is meant to be created from c++"));
-    qmlRegisterUncreatableType<ApplicationUpdater>("QFlipper", 1, 0, "ApplicationUpdater", QStringLiteral("This class is meant to be created from c++"));
+    qmlRegisterUncreatableType<BackendError>("QKiisu", 1, 0, "BackendError", QStringLiteral("This class is only a enum container"));
+    qmlRegisterUncreatableType<InputEvent>("QKiisu", 1, 0, "InputEvent", QStringLiteral("This class is only a enum container"));
+    qmlRegisterUncreatableType<ApplicationBackend>("QKiisu", 1, 0, "ApplicationBackend", QStringLiteral("This class is meant to be created from c++"));
+    qmlRegisterUncreatableType<ApplicationUpdater>("QKiisu", 1, 0, "ApplicationUpdater", QStringLiteral("This class is meant to be created from c++"));
 
-    qmlRegisterSingletonInstance("QFlipper", 1, 0, "Logger", globalLogger);
-    qmlRegisterSingletonInstance("QFlipper", 1, 0, "Preferences", globalPrefs);
-    qmlRegisterSingletonInstance("QFlipper", 1, 0, "Backend", &m_backend);
-    qmlRegisterSingletonInstance("QFlipper", 1, 0, "App", this);
-    qmlRegisterSingletonInstance("QFlipper", 1, 0, "SystemFileDialog", &m_fileDialog);
+    qmlRegisterSingletonInstance("QKiisu", 1, 0, "Logger", globalLogger);
+    qmlRegisterSingletonInstance("QKiisu", 1, 0, "Preferences", globalPrefs);
+    qmlRegisterSingletonInstance("QKiisu", 1, 0, "Backend", &m_backend);
+    qmlRegisterSingletonInstance("QKiisu", 1, 0, "App", this);
+    qmlRegisterSingletonInstance("QKiisu", 1, 0, "SystemFileDialog", &m_fileDialog);
 }
 
 void Application::initImports()

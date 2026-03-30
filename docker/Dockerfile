@@ -52,6 +52,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt -y install \
     qttools6-static \
     qt5compat6-static
 
+# TODO: These linuxdeploy download URLs are hosted on flipperzero.one and may need updating to a self-hosted mirror
 RUN wget https://update.flipperzero.one/builds/misc/linuxdeploy-x86_64-29092022.AppImage \
     -O /usr/bin/linuxdeploy && chmod +x /usr/bin/linuxdeploy
 

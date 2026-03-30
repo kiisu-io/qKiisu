@@ -2,12 +2,12 @@
 set -e
 
 RULES_DIR=/etc/udev/rules.d
-RULES_FILE="$RULES_DIR"/42-flipperzero.rules
-RULES_TEXT='#Flipper Zero serial port
+RULES_FILE="$RULES_DIR"/42-kiisu.rules
+RULES_TEXT='#Kiisu serial port
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{manufacturer}=="Flipper Devices Inc.", TAG+="uaccess"
-#Flipper Zero DFU
+#Kiisu DFU
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", ATTRS{manufacturer}=="STMicroelectronics", TAG+="uaccess"
-#Flipper ESP32s2 BlackMagic
+#Kiisu ESP32s2 BlackMagic
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="303a", ATTRS{idProduct}=="40??", ATTRS{manufacturer}=="Flipper Devices Inc.", TAG+="uaccess"
 '
 
@@ -59,7 +59,7 @@ if ! [ -d "$RULES_DIR" ]; then
     exit
 fi
 
-printf "This script will install system rules that will enable communication with your Flipper Zero.\n"
+printf "This script will install system rules that will enable communication with your Kiisu.\n"
 
 while true
 do

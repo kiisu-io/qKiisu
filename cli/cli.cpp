@@ -105,7 +105,7 @@ void Cli::initParser()
     m_options.append(QCommandLineOption({QStringLiteral("n"), QStringLiteral("repeat-number")}, QStringLiteral("Number of times to repeat the operation, 0 - indefinitely"), QStringLiteral("1")));
     m_options.append(QCommandLineOption({QStringLiteral("c"), QStringLiteral("update-channel")}, QStringLiteral("Update channel for Firmware Update/Repair"), globalPrefs->firmwareUpdateChannel()));
 
-    m_parser.setApplicationDescription(QStringLiteral("A text mode non-interactive qFlipper counterpart. Run without arguments to quickly perform Firmware Update/Repair."));
+    m_parser.setApplicationDescription(QStringLiteral("A text mode non-interactive qKiisu counterpart. Run without arguments to quickly perform Firmware Update/Repair."));
 
     m_parser.addOptions(m_options);
     m_parser.addVersionOption();

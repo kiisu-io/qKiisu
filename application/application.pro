@@ -1,6 +1,6 @@
 QT += quick serialport widgets quickcontrols2 svg
 
-include(../qflipper_common.pri)
+include(../qkiisu_common.pri)
 
 TARGET = $$NAME
 DESTDIR = $$OUT_PWD/..
@@ -109,7 +109,7 @@ unix:!macx {
     iconfiles.files = $$PWD/assets/icons/$${TARGET}.png
     iconfiles.path = $$PREFIX/share/icons/hicolor/512x512/apps
 
-    udevfiles.files = $$PWD/../installer-assets/udev/42-flipperzero.rules
+    udevfiles.files = $$PWD/../installer-assets/udev/42-kiisu.rules
     udevfiles.path = $$PREFIX/lib/udev/rules.d
 
     INSTALLS += target desktopfiles iconfiles udevfiles

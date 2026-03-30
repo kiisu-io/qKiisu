@@ -24,17 +24,17 @@ set QT_VERSION=6.4.2
 set QT_COMPILER=msvc2019_%ARCH_BITS%
 set QT_BIN_DIR=%QT_DIR%\%QT_VERSION%\%QT_COMPILER%\bin
 
-rem Download here https://cdn.flipperzero.one/STM32_DFU_USB_Driver.zip
+rem Download here https://cdn.flipperzero.one/STM32_DFU_USB_Driver.zip (TODO: this URL may need updating to a self-hosted mirror)
 set STM32_DRIVER_DIR="C:\STM32 Driver"
 
 set QMAKE=%QT_BIN_DIR%\qmake.exe
 set WINDEPLOYQT=%QT_BIN_DIR%\windeployqt.exe
 set JOM=%QT_DIR%\Tools\QtCreator\bin\jom\jom.exe
 
-set TARGET=qFlipper
+set TARGET=qKiisu
 set TARGET_CLI=%TARGET%-cli
 set PROTO_TARGET=flipperproto
-set DRIVER_TOOL=FlipperDriverTool
+set DRIVER_TOOL=KiisuDriverTool
 
 set PROJECT_DIR=%cd%
 set BUILD_DIR=%PROJECT_DIR%\build

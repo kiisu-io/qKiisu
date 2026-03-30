@@ -4,7 +4,7 @@
 
 set -exuo pipefail;
 
-PROJECT="qFlipper";
+PROJECT="qKiisu";
 BUILD_DIRECTORY="build_mac";
 
 if [ -d ".git" ]; then
@@ -29,12 +29,14 @@ fi
 
 if ! brew --prefix libusb_universal; then
     echo "Please install libusb_universal first!";
+    # NOTE: homebrew tap may need updating for Kiisu
     printf "\tbrew install flipperdevices/homebrew-flipper/libusb_universal\n";
     exit 1;
 fi
 
 if ! brew --prefix qt_universal; then
     echo "Please install qt_universal first!";
+    # NOTE: homebrew tap may need updating for Kiisu
     printf "\tbrew install flipperdevices/homebrew-flipper/qt_universal\n";
     exit 1;
 fi
@@ -79,11 +81,11 @@ relink_framework \
     "libusb-1.0.0.dylib" \
     "@loader_path/libusb-1.0.0.dylib";
 relink_framework \
-    "$PROJECT.app/Contents/MacOS/qFlipper" \
+    "$PROJECT.app/Contents/MacOS/qKiisu" \
     "libusb-1.0.0.dylib" \
     "@loader_path/../Frameworks/libusb-1.0.0.dylib";
 relink_framework \
-    "$PROJECT.app/Contents/MacOS/qFlipper-cli" \
+    "$PROJECT.app/Contents/MacOS/qKiisu-cli" \
     "libusb-1.0.0.dylib" \
     "@loader_path/../Frameworks/libusb-1.0.0.dylib";
 

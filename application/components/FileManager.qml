@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Controls.impl 2.15
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 Item {
     id: control

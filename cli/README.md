@@ -1,14 +1,14 @@
-# qFlipper-cli
-### A non-interactive text mode interface for qFlipper
-This program is mostly meant for testing purposes, although it can also provide all of the qFlipper's features from the comfort of the terminal emulator.
+# qKiisu-cli
+### A non-interactive text mode interface for qKiisu
+This program is mostly meant for testing purposes, although it can also provide all of the qKiisu's features from the comfort of the terminal emulator.
 
 ## Running:
 ### Windows:
-`<Program_files_directory>\qFlipper\qFlipper-cli.exe [args] [parameters]`
+`<Program_files_directory>\qKiisu\qKiisu-cli.exe [args] [parameters]`
 ### MacOS:
-`<Applications_directory>/qFlipper.app/Contents/MacOS/qFlipper-cli [args] [parameters]`
+`<Applications_directory>/qKiisu.app/Contents/MacOS/qKiisu-cli [args] [parameters]`
 ### Linux:
-`<AppImage_directory>/qFlipper-x86_64-x.y.z.AppImage cli [args] [parameters]`
+`<AppImage_directory>/qKiisu-x86_64-x.y.z.AppImage cli [args] [parameters]`
 
 ## Command syntax:
 Run without any arguments to perform a quick update/repair.

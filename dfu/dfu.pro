@@ -3,7 +3,7 @@ QT -= gui
 TEMPLATE = lib
 CONFIG += staticlib c++11
 
-include(../qflipper_common.pri)
+include(../qkiisu_common.pri)
 
 SOURCES += \
     debug.cpp \

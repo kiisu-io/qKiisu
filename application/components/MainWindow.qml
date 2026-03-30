@@ -6,7 +6,7 @@ import QtQuick.Controls 2.15
 import Qt.labs.platform 1.1 as Pf
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 Item {
     id: mainWindow

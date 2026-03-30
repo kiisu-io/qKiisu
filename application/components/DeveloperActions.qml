@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 import Theme 1.0
-import QFlipper 1.0
+import QKiisu 1.0
 
 Item {
     id: container
@@ -39,7 +39,7 @@ Item {
 
             ToolTip {
                 visible: parent.hovered
-                text: qsTr("Install a custom wireless stack. WARNING! This may result in a non-functional Flipper!")
+                text: qsTr("Install a custom wireless stack. WARNING! This may result in a non-functional Kiisu!")
                 implicitWidth: 250
             }
         }
