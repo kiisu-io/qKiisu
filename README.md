@@ -1,126 +1,20 @@
 ## qKiisu
 
-### Graphical desktop application for updating [Kiisu](https://kiisu.io/) firmware via PC
-qKiisu is completely open source and based on [Qt](https://www.qt.io/) framework. Runs on Windows, macOS, Linux.
+> **Work in progress.** This project is under active development and is not yet recommended for general use.
 
-## Download
+qKiisu is a fork of [qFlipper](https://github.com/flipperdevices/qFlipper) by Flipper Devices Inc., adapted for the [Kiisu V4B](https://kiisu.io/) development board by [RainWalker OÜ](https://store.rainwalker.ee/).
 
-Download official qKiisu builds here: [kiisu.io](https://kiisu.io/)
+### What it does
+Desktop application for updating Kiisu firmware, managing files on SD card, and streaming the device screen. Runs on Windows, macOS, and Linux.
 
-## Features
-* Update Kiisu's firmware and supplemental data with a press of one button
-* Repair a broken firmware installation
-* Stream Kiisu's display and control it remotely
-* Install firmware from a `.dfu` file
-* Backup and restore settings, progress and pairing data
-* Automatic self-update feature
-* Command line interface
+### Download
+Pre-built binaries are available on the [Releases](https://github.com/kiisu-io/qKiisu/releases) page.
 
-## Build from sources 
-### Cloning
-Make sure to clone the project together with submodules: 
+### Build from sources
 ```sh
 git clone https://github.com/kiisu-io/qKiisu.git --recursive
 ```
-### Windows
+See the [CI workflow](.github/workflows/ci.yml) for build steps per platform.
 
-Build requirements:
-- MS Visual Studio 2019 or newer
-- Qt5 (MSVC build) >= 5.15.0 or Qt6 >= 6.3.0
-- NSIS (to generate the installer)
-
-Edit `build_windows.bat` to adjust to your build environment and then run:
-```cmd
-build_windows.bat
-```
-
-Note: STM32 Bootloader driver is not provided in this repository.
-
-### Linux
-#### Docker build (AppImage, official)
-
-Setup dev container by running:
-```sh 
-docker compose up -d
-```
-Compile qKiisu by running:
-```sh
-docker compose exec dev ./build_linux.sh
-```
-
-#### Standalone build
-Build requirements:
-- Qt5 >= 5.15.0 or Qt6 >= 6.3.0
-- libusb >= 1.0.16
-- zlib >= 1.2.0
-
-Make sure to install the following Qt modules (the exact package names might differ slightly depending on your Linux distribution): 
-```
-base, tools, serialport, declarative,  wayland, [quickcontrols2, graphicaleffects] (Qt5 only), qt5-compat (Qt6 only)
-```
-Then run:
-```sh
-mkdir build && cd build
-qmake ../qKiisu.pro PREFIX=/path/to/install/dir -spec linux-g++ CONFIG+=qtquickcompiler &&
-make qmake_all && make && make install
-```
-**Caution:** `make install`ing to the system prefix is not recommended. Instead, use this method for building distro-specific packages. 
-In this case, it is possible to disable the built-in application update feature by passing `DEFINES+=DISABLE_APPLICATION_UPDATES` to the `qmake` call.
-
-### MacOS
-
-Build requirements:
-
-- Xcode or command line tools
-- Qt6 6.3.1 static universal from [Kiisu brew tap](https://github.com/kiisu-io/homebrew-kiisu)
-- libusb 1.0.24 universal from [Kiisu brew tap](https://github.com/kiisu-io/homebrew-kiisu)
-- [dmgbuild](https://pypi.org/project/dmgbuild/) >= 1.5.2
-
-If you want to sign binaries, set `SIGNING_KEY` environment variable:
-
-	export SIGNING_KEY="Your Developer Key ID"
-
-Building, signing and creating package:
-
-	./build_mac.sh
-
-Resulting image can be found in: `build_mac/qKiisu.dmg`
-
-## Run
-
-### Linux
-```sh
-./build/qKiisu-x86_64.AppImage
-```
-
-or just launch the file above from your favourite file manager.
-You will likely need to set up udev rules in order to use qKiisu as a normal user:
-```sh
-./qKiisu-x86_64.AppImage rules install [/optional/path/to/rules/dir]
-```
-
-#### Package managers support
-See [contrib](./contrib) for available options.
-
-## Project structure
-- `application` - The main graphical application, written mostly in QML.
-- `cli` - The command line interface, provides nearly all main application's functionality.
-- `backend` - The backend library, written in C++. Takes care of most of the logic.
-- `dfu` - Low level library for accessing USB and DFU devices.
-- `plugins` - Protobuf-based communication protocol support.
-- `3rdparty` - Third-party libraries.
-- `contrib` - Contributed packages and scripts.
-- `driver-tool` - DFU driver installation tool for Windows (based on `libwdi`).
-- `docker` - Docker configuration files.
-- `installer-assets` - Supplementary data for deployment.
-
-## Reporting bugs
-qKiisu is a project under active development. Please report any encountered bugs to make it better!
-
-The (mostly) complete guide is located [here](./.github/ISSUE_TEMPLATE/bug_report.md).
-
-## Known bugs
-
-* Sometimes Kiisu's serial port doesn't get recognised by the OS, which leads to firmware update errors. This is a firmware issue.
-* On some systems, there is noticeable flicker during opening, closing or resizing of the log area.
-* Release source archives are automatically generated by Github and are unsuitable for building as they do not contain submodules.
+### License
+GPL-3.0 — same as the original qFlipper.
