@@ -2,6 +2,10 @@ name: 'CI'
 
 on:
   push:
+  workflow_dispatch:
+
+env:
+  QT_VERSION: '6.4.2'
 
 jobs:
   build_linux:
@@ -19,7 +23,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push
+      - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           push: false
@@ -36,113 +40,153 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: qKiisu-x86_64.AppImage
-          path: |
-                ./build/qKiisu-x86_64.AppImage
+          path: ./build/qKiisu-x86_64.AppImage
           if-no-files-found: error
-          retention-days: 1
-
-  build_mac:
-    runs-on: [self-hosted, ARM64, macOS, qKiisu]
-    env:
-      MAC_OS_KEYCHAIN_NAME: ${{ secrets.MAC_OS_KEYCHAIN_NAME }}
-      MAC_OS_KEYCHAIN_PASSWORD: ${{ secrets.MAC_OS_KEYCHAIN_PASSWORD }}
-      MAC_OS_SIGNING_KEY_ID: ${{ secrets.MAC_OS_SIGNING_KEY_ID }}
-      MAC_OS_SIGNING_TEAM_ID: ${{ secrets.MAC_OS_SIGNING_TEAM_ID }}
-      MAC_OS_SIGNING_USERNAME: ${{ secrets.MAC_OS_SIGNING_USERNAME }}
-      MAC_OS_SIGNING_PASSWORD: ${{ secrets.MAC_OS_SIGNING_PASSWORD }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
-
-      - name: Build application
-        run: ./build_mac.sh
-
-      - name: Publish application
-        uses: actions/upload-artifact@v4
-        with:
-          name: qkiisu.dmg
-          path: |
-            ./build_mac/qkiisu.dmg
-          if-no-files-found: error
-          retention-days: 1
+          retention-days: 7
 
   build_windows:
-    runs-on: [self-hosted, X64, Windows]
-    env:
-        SIGNING_TOOL: ${{ secrets.WIN_SIGNING_TOOL }}
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: true
-          fetch-depth: 0  # must to be there, see installer_windows.nsi file for details
+          fetch-depth: 0
 
-      - name: Build application
-        run: .\build_windows.bat
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: win64_msvc2019_64
+          modules: qtserialport qt5compat qtshadertools qtsvg
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build
+        shell: cmd
+        run: |
+          qmake qKiisu.pro -spec win32-msvc "CONFIG+=release qtquickcompiler"
+          nmake qmake_all
+          nmake
+
+      - name: Deploy
+        shell: cmd
+        run: |
+          mkdir dist\qKiisu
+          copy release\qKiisu.exe dist\qKiisu\
+          copy release\qKiisu-cli.exe dist\qKiisu\
+          if exist release\plugins\flipperproto0.dll copy release\plugins\flipperproto0.dll dist\qKiisu\plugins\
+          cd dist\qKiisu
+          windeployqt --release --no-compiler-runtime --qmldir %GITHUB_WORKSPACE%\application qKiisu.exe
+          windeployqt --release --no-compiler-runtime qKiisu-cli.exe
+
+      # TODO: Enable Windows code signing when cloud signing certificate is ready
+      # - name: Sign executables
+      #   if: env.SIGNING_ENABLED == 'true'
+      #   shell: cmd
+      #   run: |
+      #     signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 dist\qKiisu\qKiisu.exe
+      #     signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 dist\qKiisu\qKiisu-cli.exe
+
+      - name: Package zip
+        shell: cmd
+        run: |
+          cd dist
+          tar -a -cf %GITHUB_WORKSPACE%\qKiisu-64bit.zip qKiisu\*
+
+      - name: Install NSIS
+        shell: cmd
+        run: choco install nsis -y --no-progress
+
+      - name: Build installer
+        shell: cmd
+        run: |
+          "%programfiles(x86)%\NSIS\makensis.exe" /DNAME=qKiisu /DARCH_BITS=64 installer_windows.nsi
 
       - name: Publish application
         uses: actions/upload-artifact@v4
         with:
-          name: qKiisuSetup-64bit.exe
+          name: qKiisu-Windows-64bit
           path: |
-            .\build\qKiisuSetup-64bit.exe
-            .\build\qKiisu-64bit.zip
-          if-no-files-found: error
-          retention-days: 1
+            build/qKiisuSetup-64bit.exe
+            qKiisu-64bit.zip
+          if-no-files-found: warn
+          retention-days: 7
 
-  upload:
-    name: Upload apps to storage
-    needs: [build_windows, build_mac, build_linux]
-    runs-on: ubuntu-latest
+  build_mac:
+    runs-on: macos-14
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          submodules: true
           fetch-depth: 0
 
-      - name: 'Make artifacts directory'
-        run: |
-          test -d artifacts && rm -rf artifacts || true
-          mkdir artifacts
-
-      - name: 'Generate tag suffix'
-        if: startsWith(github.ref, 'refs/tags/') == true
-        run: |
-          echo "REF=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-          echo "SUFFIX=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-
-      - name: 'Generate branch suffix'
-        if: startsWith(github.ref, 'refs/tags/') != true
-        run: |
-          echo "REF=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-          echo "SUFFIX=$(git rev-parse --abbrev-ref HEAD | sed 's/\//_/g')-$(date +'%d%m%Y')-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
-      - uses: actions/download-artifact@v4
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
         with:
-          name: qKiisu-x86_64.AppImage
-      - uses: actions/download-artifact@v4
-        with:
-          name: qKiisuSetup-64bit.exe
-      - uses: actions/download-artifact@v4
-        with:
-          name: qkiisu.dmg
+          version: ${{ env.QT_VERSION }}
+          modules: qtserialport qt5compat qtshadertools qtsvg
 
-      - name: Rename app
-        run: |
-            mv qKiisu-x86_64.AppImage ./artifacts/qKiisu-x86_64-${SUFFIX}.AppImage
-            mv qKiisuSetup-64bit.exe ./artifacts/qKiisuSetup-64bit-${SUFFIX}.exe
-            mv qKiisu-64bit.zip ./artifacts/qKiisu-64bit-${SUFFIX}.zip
-            mv qkiisu.dmg ./artifacts/qKiisu-${SUFFIX}.dmg
+      - name: Install dependencies
+        run: brew install libusb
 
-      - name: Upload artifacts to update server
-        if: ${{ !github.event.pull_request.head.repo.fork }}
+      - name: Build
         run: |
-          FILES=$(for CUR in $(ls artifacts/); do echo "-F files=@artifacts/$CUR"; done)
-          curl --fail -L -H "Token: ${{ secrets.INDEXER_TOKEN }}" \
-              -F "branch=${REF}" \
-              ${FILES[@]} \
-              "${{ secrets.INDEXER_URL }}"/qKiisu/uploadfiles
+          mkdir build_mac && cd build_mac
+          qmake ../qKiisu.pro -spec macx-clang "CONFIG+=release qtquickcompiler"
+          make qmake_all
+          make -j$(sysctl -n hw.ncpu)
+          make install
+
+      - name: Bundle libusb
+        run: |
+          cd build_mac
+          mkdir -p qKiisu.app/Contents/Frameworks
+          cp $(brew --prefix libusb)/lib/libusb-1.0.0.dylib qKiisu.app/Contents/Frameworks/
+
+          # Fix libusb rpaths
+          install_name_tool -change \
+            "$(otool -L qKiisu.app/Contents/MacOS/qKiisu | grep libusb | awk '{print $1}')" \
+            "@loader_path/../Frameworks/libusb-1.0.0.dylib" \
+            qKiisu.app/Contents/MacOS/qKiisu
+
+          if [ -f qKiisu.app/Contents/MacOS/qKiisu-cli ]; then
+            install_name_tool -change \
+              "$(otool -L qKiisu.app/Contents/MacOS/qKiisu-cli | grep libusb | awk '{print $1}')" \
+              "@loader_path/../Frameworks/libusb-1.0.0.dylib" \
+              qKiisu.app/Contents/MacOS/qKiisu-cli
+          fi
+
+          install_name_tool -id \
+            "@loader_path/libusb-1.0.0.dylib" \
+            qKiisu.app/Contents/Frameworks/libusb-1.0.0.dylib
+
+      # TODO: Enable macOS code signing when Apple Developer certificate is ready
+      # - name: Sign application
+      #   if: env.SIGNING_ENABLED == 'true'
+      #   env:
+      #     MAC_OS_SIGNING_KEY_ID: ${{ secrets.MAC_OS_SIGNING_KEY_ID }}
+      #   run: |
+      #     codesign --force --options=runtime -s "$MAC_OS_SIGNING_KEY_ID" --deep -v build_mac/qKiisu.app
+
+      - name: Create DMG
+        run: |
+          cd build_mac
+          pip3 install dmgbuild
+          dmgbuild \
+            -s "../installer-assets/macos/dmgbuild-config.py" \
+            -D "app=qKiisu.app" \
+            "qKiisu-$(git describe --tags --abbrev=0 2>/dev/null || echo dev)" \
+            qKiisu.dmg
+
+      - name: Publish application
+        uses: actions/upload-artifact@v4
+        with:
+          name: qKiisu-macOS
+          path: build_mac/qKiisu.dmg
+          if-no-files-found: warn
+          retention-days: 7
