@@ -26,7 +26,7 @@ ItemDelegate {
             Layout.topMargin: 2
             Layout.bottomMargin: 2
 
-            color: text === "development" ? "orangered" :
+            color: text === "development" ? "tomato" :
                    text === "release-candidate" ? "blueviolet" : "limegreen"
         }
 

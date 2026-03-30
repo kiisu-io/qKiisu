@@ -54,6 +54,12 @@ jobs:
           make -j$(nproc)
           make install
 
+      - name: Deploy plugin
+        run: |
+          cd build
+          mkdir -p AppDir/usr/lib/qKiisu/plugins
+          cp libflipperproto0.so AppDir/usr/lib/qKiisu/plugins/ || cp plugins/libflipperproto0.so AppDir/usr/lib/qKiisu/plugins/ || true
+
       - name: Create AppImage
         run: |
           cd build
@@ -106,9 +112,10 @@ jobs:
         shell: cmd
         run: |
           cd build
-          mkdir qKiisu
+          mkdir qKiisu\plugins
           copy qKiisu.exe qKiisu\
           copy qKiisu-cli.exe qKiisu\
+          copy plugins\flipperproto0.dll qKiisu\plugins\
           cd qKiisu
           windeployqt --release --no-compiler-runtime --qmldir %GITHUB_WORKSPACE%\application qKiisu.exe
           windeployqt --release --no-compiler-runtime qKiisu-cli.exe
@@ -158,6 +165,12 @@ jobs:
           make qmake_all
           make -j$(sysctl -n hw.ncpu)
           make install
+
+      - name: Bundle plugin
+        run: |
+          cd build_mac
+          mkdir -p qKiisu.app/Contents/PlugIns
+          cp libflipperproto0.dylib qKiisu.app/Contents/PlugIns/ || cp plugins/libflipperproto0.dylib qKiisu.app/Contents/PlugIns/ || true
 
       - name: Bundle libusb
         run: |
