@@ -8,7 +8,12 @@ qKiisu is a fork of [qFlipper](https://github.com/flipperdevices/qFlipper) by Fl
 Desktop application for updating Kiisu firmware, managing files on SD card, and streaming the device screen. Runs on Windows, macOS, and Linux.
 
 ### Download
-Pre-built binaries are available on the [Releases](https://github.com/kiisu-io/qKiisu/releases) page.
+Pre-built binaries are available on the [Releases](https://github.com/kiisu-io/qKiisu/releases) page:
+- Windows: NSIS installer (`qKiisuSetup-64bit.exe`) or portable zip
+- macOS: `.dmg` (universal x86_64 + arm64)
+- Linux: `.AppImage`
+
+> **Note.** Self-update / firmware-update server URLs are not yet set up — the UI shows a neutral state instead of fetching updates. To install firmware, drop a bundle on the device manually for now.
 
 ### Build from sources
 ```sh
