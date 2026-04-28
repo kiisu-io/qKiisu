@@ -147,7 +147,7 @@ QHash<int, QByteArray> UpdateRegistry::roleNames() const
 void UpdateRegistry::check()
 {
     if(m_directoryUrl.isEmpty()) {
-        setState(State::ErrorOccured);
+        // No update server configured — stay in Unknown so UI shows neutral state.
         return;
     }
 

@@ -25,8 +25,7 @@ Q_LOGGING_CATEGORY(LOG_APP, "APP")
 
 Application::Application(int &argc, char **argv):
     QtSingleApplication(QStringLiteral(APP_NAME), argc, argv),
-    // TODO: Replace with qKiisu update server URL when available
-    m_updateRegistry(globalPrefs->checkApplicationUpdates() ? QStringLiteral("") : QString()),
+    m_updateRegistry(globalPrefs->checkApplicationUpdates() ? QStringLiteral(KIISU_APP_UPDATES_URL) : QString()),
     m_isDeveloperMode(QGuiApplication::queryKeyboardModifiers() & Qt::KeyboardModifier::AltModifier),
     m_updateStatus(UpdateStatus::NoUpdates)
 {

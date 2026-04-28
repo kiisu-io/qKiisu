@@ -27,14 +27,14 @@ QtObject {
         readonly property color darkblue1: "#11355c"
         readonly property color darkblue2: "#152b47"
 
-        readonly property color lightred1: "#ff5b27"
-        readonly property color lightred2: "#ff5924"
-        readonly property color lightred3: "#ff1f00"
-        readonly property color lightred4: "#ff3c00"
-        readonly property color mediumred1: "#953618"
-        readonly property color mediumred2: "#672715"
-        readonly property color darkred1: "#451a0e"
-        readonly property color darkred2: "#331400"
+        readonly property color lightred1: "#ff3b8a"
+        readonly property color lightred2: "#ff2480"
+        readonly property color lightred3: "#d81b60"
+        readonly property color lightred4: "#ff5599"
+        readonly property color mediumred1: "#8a1c4a"
+        readonly property color mediumred2: "#5e1230"
+        readonly property color darkred1: "#3d0a1f"
+        readonly property color darkred2: "#2e0816"
     }
 
     readonly property var timing: QtObject {

@@ -77,7 +77,7 @@ void RegionProvisioningOperation::checkHardwareRegion()
 
 void RegionProvisioningOperation::fetchRegionInfo()
 {
-    static const auto apiUrl = QStringLiteral("https://update.flipperzero.one/regions/api/v0/bundle");
+    static const auto apiUrl = QStringLiteral(KIISU_REGION_API_URL);
     auto *fetcher = new RemoteFileFetcher(apiUrl, m_regionInfoFile, this);
 
     if(fetcher->isError()) {

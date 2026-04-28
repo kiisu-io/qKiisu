@@ -34,7 +34,7 @@ using namespace Zero;
 ApplicationBackend::ApplicationBackend(QObject *parent):
     QObject(parent),
     m_deviceRegistry(new DeviceRegistry(this)),
-    m_firmwareUpdateRegistry(new FirmwareUpdateRegistry("", this)), // TODO: Set up Kiisu firmware update server
+    m_firmwareUpdateRegistry(new FirmwareUpdateRegistry(QStringLiteral(KIISU_FW_UPDATES_URL), this)),
     m_screenStreamer(new ScreenStreamer(this)),
     m_virtualDisplay(new VirtualDisplay(this)),
     m_fileManager(new FileManager(this)),

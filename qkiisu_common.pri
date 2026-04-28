@@ -42,9 +42,20 @@ GIT_TIMESTAMP = $$system("git log -1 --pretty=format:%ct","lines", HAS_TIMESTAMP
     GIT_TIMESTAMP = 0
 }
 
+# Update server URLs — empty by default. Set in qkiisu_common.pri or via qmake CLI
+# (e.g. qmake "KIISU_APP_UPDATES_URL=https://update.kiisu.io/qKiisu/directory.json").
+# When empty, the corresponding registry stays in Unknown state and no network calls are made.
+isEmpty(KIISU_APP_UPDATES_URL): KIISU_APP_UPDATES_URL = ""
+isEmpty(KIISU_FW_UPDATES_URL):  KIISU_FW_UPDATES_URL  = ""
+# Region provisioning API (SubGHz). Defaults to upstream Flipper endpoint, override to self-host.
+isEmpty(KIISU_REGION_API_URL):  KIISU_REGION_API_URL  = "https://update.flipperzero.one/regions/api/v0/bundle"
+
 DEFINES += APP_NAME=\\\"$$NAME\\\" \
            APP_VERSION=\\\"$$GIT_VERSION\\\" \
            APP_COMMIT=\\\"$$GIT_COMMIT\\\" \
            APP_TIMESTAMP=$$GIT_TIMESTAMP \
+           KIISU_APP_UPDATES_URL=\\\"$$KIISU_APP_UPDATES_URL\\\" \
+           KIISU_FW_UPDATES_URL=\\\"$$KIISU_FW_UPDATES_URL\\\" \
+           KIISU_REGION_API_URL=\\\"$$KIISU_REGION_API_URL\\\" \
            PB_ENABLE_MALLOC
 
