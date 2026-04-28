@@ -131,12 +131,19 @@ jobs:
           cd build
           tar -a -cf qKiisu-64bit.zip qKiisu\*
 
+      - name: Build installer (NSIS)
+        shell: cmd
+        run: |
+          choco install nsis -y --no-progress
+          "C:\Program Files (x86)\NSIS\makensis.exe" /DNAME=qKiisu /DARCH_BITS=64 installer_windows.nsi
+
       - name: Publish application
         uses: actions/upload-artifact@v4
         with:
           name: qKiisu-Windows-64bit
           path: |
             build/qKiisu-64bit.zip
+            build/qKiisuSetup-64bit.exe
           if-no-files-found: error
           retention-days: 7
 

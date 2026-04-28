@@ -20,10 +20,7 @@
   !define /ifndef COMPANY "RainWalker OÜ"
   !define /ifndef ARCH_BITS 64
   !define UNINSTALL_EXE "$INSTDIR\uninstall.exe"
-  !define VCREDIST2019_EXE "$INSTDIR\vcredist_msvc2019_x${ARCH_BITS}.exe"
-  !define VCREDIST2010_EXE "$INSTDIR\vcredist_x${ARCH_BITS}.exe"
   !define UNINSTALL_REG_PATH "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
-  !define STM32_DRIVER_PATH "$INSTDIR\STM32 Driver"
 
   ; Include File Functions Header
   !include "FileFunc.nsh"
@@ -57,9 +54,6 @@
 
   ; Enable scaling for high DPI screen
   ManifestDPIAware true
-
-  ; Sign the Uninstaller.exe file
-  !uninstfinalize 'kiisu_code_sign.bat "%1" wow64shit'
 
   ; Version Information displayer in Properties -> Details tab
   ; Required for antivirus databases
@@ -137,26 +131,12 @@ Section "-Main Application"
     ; Extract files
     SetOverwrite on
     File /r "build\${NAME}\*"
-    
 
-    ; Check if VC2010 installed and install it if not
-    ReadRegStr $0 HKLM "SOFTWARE\WOW6432Node\Microsoft\VisualStudio\10.0\VC\VCRedist\x64" "Version"
-    ${If} $0 == ""
-      DetailPrint "Microsoft Visual C++ 2010 libs not found. Installing..."
-      ExecWait "${VCREDIST2010_EXE} /q /norestart"
-    ${Else}
-      DetailPrint "Found Microsoft Visual C++ 2010 Version: $0"
-    ${EndIf}
-    
-    ; Check if VC2019 installed and install it if not
-    ReadRegStr $0 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Version"
-    ${If} $0 == ""
-      DetailPrint "Microsoft Visual C++ 2019 libs not found. Installing..."
-      ExecWait "${VCREDIST2019_EXE} /install /quiet /norestart"
-    ${Else}
-      DetailPrint "Found Microsoft Visual C++ 2015-2019 Version: $0"
-    ${EndIf}
-    
+    ; NOTE: STM32 DFU driver and Visual C++ Redistributable are not bundled.
+    ; Install them separately if needed:
+    ;   - STM32 driver: use the bundled KiisuDriverTool / Zadig.
+    ;   - VC++ runtime: https://aka.ms/vs/17/release/vc_redist.x64.exe
+
     WriteUninstaller "${UNINSTALL_EXE}"
 
     WriteRegStr HKLM "Software\${NAME}" "" $INSTDIR ; Save real install path for next update
@@ -170,12 +150,6 @@ Section "-Main Application"
     WriteRegDWORD HKLM "${UNINSTALL_REG_PATH}" "NoRepair" 1
 SectionEnd
 
-Section "USB DFU Driver" UsbDriverSection
-  DetailPrint "Installing STM32 DFU Driver..."
-  ${DisableX64FSRedirection}
-	nsExec::ExecToLog '"$SYSDIR\pnputil.exe" /add-driver "${STM32_DRIVER_PATH}\STM32Bootloader.inf" /install'
-SectionEnd
-
 Section "Start menu entry" StartMenuSection
 	CreateShortCut "$SMPROGRAMS\${NAME}.lnk" "$INSTDIR\${NAME}.exe"
 SectionEnd
@@ -187,23 +161,13 @@ SectionEnd
 Section "-Cleanup"
 
     ; Use 64bit registry keys, not WOW6432Node
-    SetRegView 64 
-
-	Delete ${VCREDIST2019_EXE}
-	Delete ${VCREDIST2010_EXE}
-	;RMDir /r "${STM32_DRIVER_PATH}"
+    SetRegView 64
 
 	${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
 	IntFmt $0 "0x%08X" $0
 	WriteRegDWORD HKLM "${UNINSTALL_REG_PATH}" "EstimatedSize" "$0"
 SectionEnd
 
-
-; Section to remove all Kiisu Drivers, unchecked by default
-Section /o "un.Remove Drivers" RemoveDriversSection
-  DetailPrint "Removing drivers. This may take a while..."
-  nsExec::ExecToLog '$SYSDIR\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy RemoteSigned -File "${STM32_DRIVER_PATH}\delete_all_dfu_drivers.ps1"'
-SectionEnd
 
 ;--------------------------------
 ;Uninstaller Section
@@ -232,20 +196,16 @@ SectionEnd
 ; A text hovers over a component on choosing components to install on MUI_PAGE_COMPONENTS
    
   ;Language strings
-  LangString DESC_UsbDriverSection ${LANG_ENGLISH} "STM32 Bootloader Driver for Kiisu DFU mode"
   LangString DESC_StartMenuSection ${LANG_ENGLISH} "Add qKiisu to Windows Start menu"
   LangString DESC_DesktopShortcutSection ${LANG_ENGLISH} "Create qKiisu shortcut on Desktop"
-  LangString DESC_RemoveDriversSection ${LANG_ENGLISH} "Remove all STM32 USB drivers from the system"
-  LangString DESC_UninstallqKiisuSection ${LANG_ENGLISH} "Remove all STM32 USB drivers from the system"
+  LangString DESC_UninstallqKiisuSection ${LANG_ENGLISH} "Uninstall qKiisu"
   ;Assign language strings to install sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${UsbDriverSection} $(DESC_UsbDriverSection)
     !insertmacro MUI_DESCRIPTION_TEXT ${StartMenuSection} $(DESC_StartMenuSection)
     !insertmacro MUI_DESCRIPTION_TEXT ${DesktopShortcutSection} $(DESC_DesktopShortcutSection)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
   ;Assign language strings to UNinstall sections
   !insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${RemoveDriversSection} $(DESC_RemoveDriversSection)
     !insertmacro MUI_DESCRIPTION_TEXT ${UninstallqKiisuSection} $(DESC_UninstallqKiisuSection)
   !insertmacro MUI_UNFUNCTION_DESCRIPTION_END
 
