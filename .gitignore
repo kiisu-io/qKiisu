@@ -6,3 +6,13 @@ x64
 Win32
 .vs
 .DS_Store
+
+# Claude Code local config / scratch
+.claude/
+
+# Local build wrappers (machine-specific paths to Qt/MSVC)
+build_local.cmd
+deploy_local.cmd
+
+# aqt (Qt installer) logs
+aqtinstall.log
