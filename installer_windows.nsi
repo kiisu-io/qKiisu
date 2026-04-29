@@ -17,7 +17,7 @@
   SetCompressor /solid /final lzma
 
   !define /ifndef NAME "qKiisu"
-  !define /ifndef COMPANY "RainWalker OÜ"
+  !define /ifndef COMPANY "RainWalker"
   !define /ifndef ARCH_BITS 64
   !define UNINSTALL_EXE "$INSTDIR\uninstall.exe"
   !define UNINSTALL_REG_PATH "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
@@ -62,8 +62,8 @@
   VIAddVersionKey "FileVersion" "${VERSION}.0"
   VIAddVersionKey "ProductName" "qKiisu"
   VIAddVersionKey "ProductVersion" "${VERSION}.0"
-  VIAddVersionKey "CompanyName" "RainWalker OÜ"
-  VIAddVersionKey "LegalCopyright" "(C) RainWalker OÜ"
+  VIAddVersionKey "CompanyName" "RainWalker"
+  VIAddVersionKey "LegalCopyright" "(C) RainWalker"
 
 ;--------------------------------
 ;Installer wizard pages
@@ -72,18 +72,17 @@
   Caption "qKiisu ${VERSION} Setup"
 
   !define MUI_HEADERIMAGE
-  !define MUI_HEADERIMAGE_BITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header216.bmp"
-  !define MUI_HEADERIMAGE_UNBITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header216.bmp"
+  !define MUI_HEADERIMAGE_BITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header.bmp"
+  !define MUI_HEADERIMAGE_UNBITMAP "installer-assets\backgrounds\windows_installer\windows_installer_header.bmp"
 
   ; Welcome and Finish page settings
   !define MUI_WELCOMEPAGE_TITLE  "Welcome to qKiisu ${VERSION} Setup"
-  !define MUI_WELCOMEPAGE_TEXT "qKiisu is a desktop application for updating Kiisu firmware and databases, manage files on SD card, and repair corrupted device.$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\nOpen Source and Distributed under GPL v3 License$\r$\nCopyright (C) 2024 RainWalker OÜ"
-  !define MUI_WELCOMEFINISHPAGE_BITMAP "installer-assets\backgrounds\windows_installer\windows_installer_welcome216.bmp"
-  !define MUI_UNWELCOMEFINISHPAGE_BITMAP "installer-assets\backgrounds\windows_uninstaller\windows_uninstaller_welcome216.bmp"
-  !define MUI_PAGE_CUSTOMFUNCTION_SHOW showHiDpi ; HiDpi replace image hack for welcome page
+  !define MUI_WELCOMEPAGE_TEXT "qKiisu is a desktop application for updating Kiisu firmware and databases, manage files on SD card, and repair corrupted device.$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\n$\r$\nOpen Source and Distributed under GPL v3 License$\r$\nCopyright (C) RainWalker"
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "installer-assets\backgrounds\windows_installer\windows_installer_welcome.bmp"
+  !define MUI_UNWELCOMEFINISHPAGE_BITMAP "installer-assets\backgrounds\windows_uninstaller\windows_uninstaller_welcome.bmp"
   !insertmacro MUI_PAGE_WELCOME
 
-  !insertmacro MUI_PAGE_DIRECTORY 
+  !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_COMPONENTS
   ;!define MUI_FINISHPAGE_NOAUTOCLOSE ; Debug
   !insertmacro MUI_PAGE_INSTFILES
@@ -93,7 +92,6 @@
 ;  !define MUI_FINISHPAGE_RUN_TEXT "Run qKiisu now"
   !define MUI_FINISHPAGE_LINK "More Info --> Kiisu Documentation"
   !define MUI_FINISHPAGE_LINK_LOCATION "https://kiisu.io"
-  !define MUI_PAGE_CUSTOMFUNCTION_SHOW showHiDpi ; HiDpi replace image hack for finish page
   !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_WELCOME
@@ -238,37 +236,6 @@ SectionEnd
 
     ; Enable install log, need NSIS special build https://nsis.sourceforge.io/Special_Builds
     ;LogSet on ;  Debug
-
-
-    ;-------------------------------
-    ; Initialize images files for HiDpi hack on every installer start
-    ; Refers to https://gist.github.com/sredna/c294cdf9014e03d8cd6f8bd4a39437ec
-    ; http://forums.winamp.com/showthread.php?t=443754
-
-    InitPluginsDir
-    ; Installer Welcome images
-    File /oname=$PLUGINSDIR\windows_installer_welcome96.bmp installer-assets\backgrounds\windows_installer\windows_installer_welcome96.bmp
-    File /oname=$PLUGINSDIR\windows_installer_welcome120.bmp installer-assets\backgrounds\windows_installer\windows_installer_welcome120.bmp
-    File /oname=$PLUGINSDIR\windows_installer_welcome144.bmp installer-assets\backgrounds\windows_installer\windows_installer_welcome144.bmp
-    File /oname=$PLUGINSDIR\windows_installer_welcome168.bmp installer-assets\backgrounds\windows_installer\windows_installer_welcome168.bmp
-    File /oname=$PLUGINSDIR\windows_installer_welcome192.bmp installer-assets\backgrounds\windows_installer\windows_installer_welcome192.bmp
-    File /oname=$PLUGINSDIR\windows_installer_welcome216.bmp installer-assets\backgrounds\windows_installer\windows_installer_welcome216.bmp
-
-    ; Installer Finish images 
-    File /oname=$PLUGINSDIR\windows_installer_finish96.bmp installer-assets\backgrounds\windows_installer\windows_installer_finish96.bmp
-    File /oname=$PLUGINSDIR\windows_installer_finish120.bmp installer-assets\backgrounds\windows_installer\windows_installer_finish120.bmp
-    File /oname=$PLUGINSDIR\windows_installer_finish144.bmp installer-assets\backgrounds\windows_installer\windows_installer_finish144.bmp
-    File /oname=$PLUGINSDIR\windows_installer_finish168.bmp installer-assets\backgrounds\windows_installer\windows_installer_finish168.bmp
-    File /oname=$PLUGINSDIR\windows_installer_finish192.bmp installer-assets\backgrounds\windows_installer\windows_installer_finish192.bmp
-    File /oname=$PLUGINSDIR\windows_installer_finish216.bmp installer-assets\backgrounds\windows_installer\windows_installer_finish216.bmp
-
-    ; Installer/Uninstaller header
-    File /oname=$PLUGINSDIR\windows_installer_header96.bmp installer-assets\backgrounds\windows_installer\windows_installer_header96.bmp
-    File /oname=$PLUGINSDIR\windows_installer_header120.bmp installer-assets\backgrounds\windows_installer\windows_installer_header120.bmp
-    File /oname=$PLUGINSDIR\windows_installer_header144.bmp installer-assets\backgrounds\windows_installer\windows_installer_header144.bmp
-    File /oname=$PLUGINSDIR\windows_installer_header168.bmp installer-assets\backgrounds\windows_installer\windows_installer_header168.bmp
-    File /oname=$PLUGINSDIR\windows_installer_header192.bmp installer-assets\backgrounds\windows_installer\windows_installer_header192.bmp
-    File /oname=$PLUGINSDIR\windows_installer_header216.bmp installer-assets\backgrounds\windows_installer\windows_installer_header216.bmp
   FunctionEnd
 
 ;-------------------------------
@@ -279,22 +246,4 @@ Function un.onInit
       SetRegView 64 ; Use 64bit registry keys, not WOW6432Node
     ${EndIf}
 FunctionEnd
-
-;-------------------------------
-; Function for dirty hijack image depends on DPI
-  Function showHiDpi
-    System::Call USER32::GetDpiForSystem()i.r0 
-    ${If} $0 U<= 0 
-        System::Call USER32::GetDC(i0)i.r1 
-        System::Call GDI32::GetDeviceCaps(ir1,i88)i.r0 
-        System::Call USER32::ReleaseDC(i0,ir1) 
-    ${EndIf} 
-    
-    ; If DPI greater than 216, do nothing and use default image and scaling
-    ${If} $0 <= 216
-      ${NSD_SetImage} $mui.WelcomePage.Image $PLUGINSDIR\windows_installer_welcome$0.bmp $mui.WelcomePage.Image.Bitmap
-      ${NSD_SetImage} $mui.FinishPage.Image $PLUGINSDIR\windows_installer_finish$0.bmp $mui.FinishPage.Image.Bitmap
-      SetBrandingImage /IMGID=1046 "$PLUGINSDIR\windows_installer_header$0.bmp"
-    ${EndIf}
-  FunctionEnd 
 

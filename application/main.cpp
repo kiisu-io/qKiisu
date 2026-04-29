@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setApplicationName(APP_NAME);
     QCoreApplication::setApplicationVersion(APP_VERSION);
-    QCoreApplication::setOrganizationName(QStringLiteral("RainWalker OÜ"));
+    QCoreApplication::setOrganizationName(QStringLiteral("RainWalker"));
     QCoreApplication::setOrganizationDomain(QStringLiteral("kiisu.io"));
 
 #if QT_VERSION < 0x060000
